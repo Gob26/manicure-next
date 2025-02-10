@@ -1,0 +1,32 @@
+.sidebar {
+  @apply fixed right-4 top-1/2 transform -translate-y-1/2 rounded-lg bg-white/5 w-56 py-2;
+  box-shadow: 0 4px 4px -2px var(--hover-bg-color), 0 2px 4px -3px var(--hover-bg-color);
+  border: 0.5px solid var(--hover-bg-color); // Добавляем обводку
+  backdrop-filter: blur(1.5px); // Добавляем размытие фона
+}
+
+.menu {
+  > a {
+    @apply flex items-center gap-2.5 py-3.5 px-5
+    transition-all duration-300 ease-in-out;
+
+    &:hover {
+      background-color: var(--hover-bg-color); // Используем CSS-переменную из redux
+    }
+
+    > svg {
+      @apply text-current transition-colors
+       duration-300 ease-in-out;  /* Это для использования текущего цвета текста */
+    }
+  }
+}
+
+.toggle {
+  @apply absolute -top-3 flex items-center justify-center cursor-pointer opacity-50
+  transition-opacity duration-300 ease-in-out scale-50;
+  padding: 0.1rem;
+
+  &:hover {
+    @apply opacity-100;
+  }
+}
