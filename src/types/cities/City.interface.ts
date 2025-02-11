@@ -1,25 +1,27 @@
-// Интерфейс для города
+export interface ICityResponse {
+  city: ICity;
+  description: ICityDescription;
+}
+
+// Остальные интерфейсы остаются без изменений
 export interface ICity {
-    id: number;             // Уникальный идентификатор
-    name: string;           // Название города
-    district: string;       // Район
-    subject: string;        // Субъект (регион)
-    population: number;     // Население
-    latitude: number;       // Широта
-    longitude: number;      // Долгота
-    slug: string;           // Слаг для города (используется в URL)
-    
-    description: ICityDescription; // Описание города (связанное описание)
-  }
-  
-  // Интерфейс для описания города
-  export interface ICityDescription {
-    id: number;             // Уникальный идентификатор описания
-    city_id: number;        // ID города
-    title: string | null;    // Заголовок описания
-    description: string | null; // Описание города
-    text: string | null;     // Дополнительный текст
-  }
+  id: number;
+  name: string;
+  district: string;
+  subject: string;
+  population: number;
+  latitude: number;
+  longitude: number;
+  slug: string;
+}
+
+export interface ICityDescription {
+  id: number;
+  city_id: number;
+  title: string | null;
+  description: string | null;
+  text: string | null;
+}
   
   // Интерфейс для списка городов
   export interface ICityList {
