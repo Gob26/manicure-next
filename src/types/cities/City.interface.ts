@@ -1,6 +1,6 @@
 export interface ICityResponse {
   city: ICity;
-  description: ICityDescription;
+  description?: ICityDescription;
 }
 
 // Остальные интерфейсы остаются без изменений
