@@ -2,20 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Основные переменные для тем */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary-color: #ff4081; /* Розовый цвет (светлая тема) */
+  --secondary-color: #0abfbf; /* Бирюзовый цвет */
+  --background-color: #ffffff;
+  --text-color: #213547;
+  --hover-color: rgba(255, 64, 129, 0.1); /* Легкий розовый ховер */
+  --hover-color-dark: rgba(10, 191, 191, 0.1); /* Легкий бирюзовый ховер */
+  --light-background-color: #ffffff;
+  --dark-background-color: #181818;
+  --light-text-color: #213547;
+  --dark-text-color: rgba(255, 255, 255, 0.87);
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Темная тема */
+[data-theme="dark"] {
+  --primary-color: var(--secondary-color); 
+  --background-color: var(--dark-background-color);
+  --text-color: var(--dark-text-color);
+  --hover-color: var(--hover-color-dark);
 }
 
+/* Глобальные стили */
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-[var(--background-color)] text-[var(--text-color)] min-h-screen flex items-center justify-center transition-all;
+}
+
+/* Стили для ссылок */
+a {
+  @apply font-medium text-[var(--primary-color)] transition-colors;
+}
+a:hover {
+  @apply text-opacity-80;
+}
+
+/* Кнопки */
+button {
+  @apply px-4 py-2 rounded-lg font-medium bg-[var(--primary-color)] text-white transition-colors;
+}
+button:hover {
+  @apply bg-opacity-80;
+}
+
+/* iOS-стиль переключателя темы */
+.ios-toggle {
+  @apply w-[51px] h-[31px] rounded-full bg-[var(--primary-color)] relative cursor-pointer transition-colors;
+}
+.ios-toggle:active {
+  @apply bg-opacity-80;
+}
+.toggle-circle {
+  @apply w-[25px] h-[25px] bg-white rounded-full absolute top-[3px] left-[3px] shadow-md transition-transform;
+}
+
+/* Тёмная тема для тумблера */
+.ios-toggle.dark {
+  @apply bg-[var(--primary-color)];
+}
+.ios-toggle.dark .toggle-circle {
+  @apply translate-x-[20px];
 }

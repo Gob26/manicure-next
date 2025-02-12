@@ -1,0 +1,34 @@
+// ThemeToggleButton.scss
+
+.ios-toggle {
+    width: 51px;
+    height: 31px;
+    border-radius: 15.5px;
+    background-color: var(--primary-color); // Цвет зависит от темы
+    transition: background-color 0.3s ease;
+  
+    &.dark {
+      background-color: var(--link-color); // Темный фон для тумблера
+    }
+  
+    &:active {
+      background-color: var(--primary-hover-color);
+    }
+  }
+  
+  .toggle-circle {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: white; // Круг всегда белый
+    top: 3px;
+    left: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+  
+    // Плавное смещение при темной теме
+    .ios-toggle.dark & {
+      transform: translateX(20px);
+    }
+  }
+  

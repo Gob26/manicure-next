@@ -1,3 +1,5 @@
+// Header.module.scss
+
 .header {
   display: flex;
   align-items: center;
@@ -7,7 +9,7 @@
   color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
-  .nav-links {
+  .navLinks {
     display: flex;
     gap: 1rem;
   }

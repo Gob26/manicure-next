@@ -1,7 +1,7 @@
 // src/app/cities/page.tsx
 
 import { getCitiesList } from '@/api/cities/cities_list/citiesListApi';
-import Cities from '@/components/screens/Cities/Cities';
+import Cities from '@/components/screens/Сities/Cities';
 import { ICity } from '@/types/cities/City.interface';
 
 const CitiesPage = async () => {

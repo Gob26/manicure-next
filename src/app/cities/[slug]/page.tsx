@@ -4,7 +4,7 @@ import { ICityPageProps, ICity } from '@/types/cities/City.interface';
 import CityDetail from '@/components/UI/City/City';
 
 export default async function CityPage({ params }: ICityPageProps) {
-  const { slug } = params;  // Доступ к параметрам (slug)
+  const {slug } = await params;  // Доступ к параметрам (slug)
 
   // Получаем данные города
   const cityData = await getCityDetails(slug);
