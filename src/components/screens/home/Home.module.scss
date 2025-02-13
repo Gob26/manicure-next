@@ -1,43 +1,25 @@
 .home {
-    background-color: #f9f9f9;
-    min-height: 100vh;
-    padding: 2rem;
+  @apply bg-[var(--background-color)] min-h-screen py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300; /* Используем CSS переменную для фона и добавляем transition */
+}
+
+.main {
+  @apply flex flex-col items-center text-center mb-8; /* Tailwind utilities для .main */
+
+  h1 {
+    @apply text-[var(--text-color)] text-4xl sm:text-5xl font-bold transition-colors duration-300; /* Используем CSS переменную для текста и добавляем transition */
   }
-  
-  .main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 2rem;
-  
-    h1 {
-      font-size: 2.5rem;
-      color: #212121;
-    }
-  
-    p {
-      font-size: 1.25rem;
-      color: #757575;
-    }
+
+  p {
+    @apply text-[var(--text-color)] text-lg sm:text-xl mt-4 opacity-75 transition-colors duration-300; /* Используем CSS переменную для текста и добавляем transition */
   }
-  
-  .contentGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
-  }
-  
-  .card {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    text-align: center;
-    transition: transform 0.3s ease;
-  
-    &:hover {
-      transform: translateY(-4px);
-    }
-  }
-  
+}
+
+.contentGrid {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4; /* Tailwind utilities для .contentGrid */
+}
+
+.card {
+  @apply bg-[var(--light-background-color)] rounded-lg shadow-md p-4 text-center transition-colors duration-300 ease-out hover:translate-y-[-4px]; /* Используем CSS переменную для фона карточки и добавляем transition */
+  /*  Внимание: используем --light-background-color, так как card обычно светлее основного фона */
+  /*  Если нужно тень тоже менять в темной теме, можно сделать и для shadow через CSS переменные или Tailwind variants */
+}

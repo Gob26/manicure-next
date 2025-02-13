@@ -9,8 +9,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: "var(--background-color)", // Исправлено
+        text: "var(--text-color)", // Добавлено
+        primary: "var(--primary-color)", // Добавлено
       },
     },
   },

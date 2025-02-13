@@ -1,5 +1,5 @@
 import { FC } from "react";
-import styles from './Home.module.scss';
+import styles from "./Home.module.scss";
 
 const Home: FC = () => {
   return (
@@ -8,6 +8,7 @@ const Home: FC = () => {
         <h1>Добро пожаловать на платформу маникюра!</h1>
         <p>Исследуйте лучшие салоны и мастеров вашего города.</p>
       </main>
+
       <section className={styles.contentGrid}>
         <div className={styles.card}>Контент 1</div>
         <div className={styles.card}>Контент 2</div>

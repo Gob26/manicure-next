@@ -1,0 +1,33 @@
+// Цветовые палитры (SCSS переменные)
+$primary-tiffany: #0AB697;
+$secondary-tiffany: #128C7E;
+$accent-tiffany: #6DD5ED;
+
+$primary-pink: #FFC7D6;
+$secondary-pink: #FF9AA2;
+$accent-pink: #FEA47F;
+
+// Тематические CSS переменные (определяются на основе палитр)
+:root {
+  // Светлая тема (на основе розовой палитры)
+  --primary-color: $primary-pink;
+  --background-color: #ffffff; /* Или можно использовать функцию из палитры, если нужно */
+  --text-color: #2C3333;
+  --hover-color: rgba($primary-pink, 0.1); /* Пример использования SCSS переменной */
+
+  // Дополнительные цвета светлой темы (если нужны)
+  --light-background-color: #ffffff;
+  --light-text-color: #2C3333;
+}
+
+[data-theme="dark"] {
+  // Темная тема (на основе тиффани палитры)
+  --primary-color: $primary-tiffany;
+  --background-color: #181818;
+  --text-color: #D5F6ED;
+  --hover-color: rgba($primary-tiffany, 0.1); /* Пример использования SCSS переменной */
+
+  // Дополнительные цвета темной темы (если нужны)
+  --dark-background-color: #181818;
+  --dark-text-color: #D5F6ED;
+}
