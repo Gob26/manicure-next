@@ -1,9 +1,11 @@
+// src/components/layout/RootLayout.tsx
+import Sidebar from '@/components/sideBar/components/SidebarDynamic'; // Импортируем динамическую версию Sidebar
+import { ThemeProvider } from "@/shared/context/ThemeContext";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import Layout from "@/components/layout/Layout";
 import { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.scss";
-import Layout from "@/components/layout/Layout";
-import ReactQueryProvider from "@/providers/ReactQueryProvider";
-import { ThemeProvider } from "@/shared/context/ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +32,10 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider>
           <ReactQueryProvider>
-            <Layout title="Салоны и не только">{children}</Layout>
+            <Layout title="Салоны и не только">
+              <Sidebar /> {/* Теперь используем динамически загруженный сайдбар */}
+              {children}
+            </Layout>
           </ReactQueryProvider>
         </ThemeProvider>
       </body>
