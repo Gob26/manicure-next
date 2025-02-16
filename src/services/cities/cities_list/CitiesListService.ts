@@ -14,9 +14,9 @@ export const getCitiesList = async (): Promise<ICity[]> => {
 };
 
 // Получение конкретного города по slug
-export const getCityDetails = async (slug: string): Promise<ICityResponse | null> => {
+export const getCityDetails = async (citySlug: string): Promise<ICityResponse | null> => {
   try {
-    const response = await axiosInstance.get<ICityResponse>(`/cities/${slug}`);
+    const response = await axiosInstance.get<ICityResponse>(`/cities/${citySlug}`);
     return response.data;
   } catch (error) {
     console.error('Failed to fetch city', error);
