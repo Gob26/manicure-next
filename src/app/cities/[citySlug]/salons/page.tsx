@@ -1,28 +1,27 @@
 import { Suspense } from "react";
-import { getMastersList } from "@/services/masters/MastersListService";
-import { IMastersPageProps } from "@/types/masters/Master.interface";
-import MastersList from "@/components/masters/masters/MastersList";
+import { getSalonsList } from "@/services/salons/SalonsListService";
+import { ISalonsPageProps } from "@/types/salons/Salon.interface";
+import SalonsList from "@/components/salons/salons/SalonsList";
 
-export default async function MastersPage({ params }: IMastersPageProps) {
+export default async function SalonsPage({params}: ISalonsPageProps) {
   const citySlug = params.citySlug;
-  console.log("--> MastersPage started for citySlug:", citySlug);
+  console.log("--> SalonsPage started for citySlug:", citySlug);
 
   try {
     console.log("--> Запрос мастеров для города:", citySlug);
-    
-    const masters = await getMastersList(citySlug);
-    console.log("--> Получены данные о мастерах:", masters);
-
+    const salons = await getSalonsList(citySlug)
+    console.log("--> Получены данные о салоне:", salons)
+  
     return (
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Мастера в городе {citySlug}</h1>
         <Suspense fallback={<div className="text-center">Загрузка...</div>}>
-          <MastersList masters={masters} citySlug={citySlug} />
+          <SalonsList salons={salons} citySlug={citySlug} />
         </Suspense>
       </div>
-    );
+    );   
   } catch (error) {
-    console.error(`--> Ошибка при получении мастеров:`, error);
+    console.error("--> Ошибка при получени салона:", error);
     return (
       <div className="container mx-auto p-4">
         <div className="bg-red-50 border border-red-200 p-4 rounded">

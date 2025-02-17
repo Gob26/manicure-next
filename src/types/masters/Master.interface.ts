@@ -13,7 +13,7 @@ export interface IMaster {
 export interface IMastersListResponse {
   masters: IMaster[];
 }
-
+// объект с параметрами запроса
 export interface IMastersPageProps {
   params: { citySlug: string };
 }

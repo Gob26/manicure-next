@@ -44,7 +44,7 @@ const Cities: FC<ICityList> = ({ cities }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
         {paginatedCities.length > 0 && paginatedCities.map((city) => (
           <div key={city.id} className="bg-[var(--light-background-color)] rounded-xl overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all duration-300 dark:bg-gray-800 dark:shadow-none animate-fade-in">
-            <a href={`/cities/${city.slug}`} className="block p-4 text-[var(--text-color)] no-underline transition-colors duration-300">
+            <a href={`/cities/${city.citySlug}`} className="block p-4 text-[var(--text-color)] no-underline transition-colors duration-300">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-lg text-[var(--text-color)] transition-colors duration-300">
                   {getCityInitial(city.name)}

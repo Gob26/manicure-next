@@ -2,6 +2,7 @@
 
 import { FC, useEffect } from "react";
 import Script from "next/script";
+import { ICityResponse } from "@/types/cities/City.interface";
 
 declare global {
   interface Window {
