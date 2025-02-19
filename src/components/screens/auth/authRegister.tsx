@@ -3,8 +3,8 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { IUserRegisterRequest } from "@/types/auth/authRegister.interface";
-import { Toaster, toast } from "react-hot-toast"; // Добавляем Toaster
-import { registerUser } from "@/api/auth/authRegister";
+import { Toaster } from "react-hot-toast";
+import { registerUserService } from "@/services/auth/authRegistrService";
 
 const RegisterPage = () => {
   const {
@@ -19,21 +19,17 @@ const RegisterPage = () => {
   });
 
   const onSubmit: SubmitHandler<IUserRegisterRequest> = async (data) => {
-    // Добавляем логи для отладки
     console.log('Начало отправки формы', data);
 
     try {
-      const response = await registerUser(data);
+      const response = await registerUserService(data);
       console.log('Успешный ответ:', response);
-      
-      alert('Регистрация успешна!'); // Временно используем alert вместо toast
+      alert('Регистрация успешна!');
       reset();
-      
     } catch (error) {
       console.error('Ошибка при регистрации:', error);
-      
       if (error instanceof Error) {
-        alert(error.message); // Временно используем alert вместо toast
+        alert(error.message);
       } else {
         alert('Произошла ошибка при регистрации');
       }
@@ -42,16 +38,12 @@ const RegisterPage = () => {
 
   return (
     <>
-      <Toaster position="top-center" /> {/* Добавляем компонент уведомлений */}
-      
-      <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Регистрация</h2>
-        
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="space-y-2">
-            <label htmlFor="username" className="block font-medium text-gray-700">
-              Имя пользователя
-            </label>
+      <Toaster position="top-center" />
+      <div>
+        <h2>Регистрация</h2>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <label htmlFor="username">Имя пользователя</label>
             <input
               {...register("username", {
                 required: "Имя пользователя обязательно",
@@ -62,18 +54,13 @@ const RegisterPage = () => {
               })}
               type="text"
               id="username"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Введите имя пользователя"
             />
-            {errors.username && (
-              <p className="text-red-500 text-sm">{errors.username.message}</p>
-            )}
+            {errors.username && <p>{errors.username.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="email" className="block font-medium text-gray-700">
-              Email
-            </label>
+          <div>
+            <label htmlFor="email">Email</label>
             <input
               {...register("email", {
                 required: "Email обязателен",
@@ -84,18 +71,13 @@ const RegisterPage = () => {
               })}
               type="email"
               id="email"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="example@domain.com"
             />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email.message}</p>
-            )}
+            {errors.email && <p>{errors.email.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="password" className="block font-medium text-gray-700">
-              Пароль
-            </label>
+          <div>
+            <label htmlFor="password">Пароль</label>
             <input
               {...register("password", {
                 required: "Пароль обязателен",
@@ -106,52 +88,34 @@ const RegisterPage = () => {
               })}
               type="password"
               id="password"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Введите пароль"
             />
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
-            )}
+            {errors.password && <p>{errors.password.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="city_name" className="block font-medium text-gray-700">
-              Город
-            </label>
+          <div>
+            <label htmlFor="city_name">Город</label>
             <input
               {...register("city_name", {
                 required: "Город обязателен"
               })}
               type="text"
               id="city_name"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Введите название города"
             />
-            {errors.city_name && (
-              <p className="text-red-500 text-sm">{errors.city_name.message}</p>
-            )}
+            {errors.city_name && <p>{errors.city_name.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="role" className="block font-medium text-gray-700">
-              Роль
-            </label>
-            <select
-              {...register("role")}
-              id="role"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
+          <div>
+            <label htmlFor="role">Роль</label>
+            <select {...register("role")} id="role">
               <option value="client">Клиент</option>
               <option value="master">Мастер</option>
               <option value="salon">Салон</option>
             </select>
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
+          <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Регистрация..." : "Зарегистрироваться"}
           </button>
         </form>

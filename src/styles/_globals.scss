@@ -4,10 +4,10 @@
 
 :root {
   /* Определяем переменные для светлой темы */
-  --primary-color: #f6b1c4; /* Розовый цвет для светлой темы */
+  --primary-color: #fb96b3; /* Розовый цвет для светлой темы */
   --secondary-color: #FF9AA2; /* Цвет для второстепенных элементов */
   --background-color: #ffffff;
-  --text-color: #2C3333;
+  --text-color: #495050;
   --hover-color: rgba(255, 199, 214, 0.1);
 
   /* Определяем переменные для темной темы */
@@ -17,8 +17,8 @@
   --dark-hover-color: rgba(10, 191, 191, 0.1);
   
   /* Цвет для тумблера */
-  --toggle-light-color: var(--secondary-color); /* Цвет тумблера для светлой темы (как secondary-color) */
-  --toggle-dark-color: var(--dark-primary-color); /* Цвет тумблера для темной темы (тиффани) */
+  --toggle-light-color: var(--secondary-color);
+  --toggle-dark-color: var(--dark-primary-color);
 }
 
 [data-theme="dark"] {
@@ -32,34 +32,95 @@
   --toggle-light-color: var(--dark-primary-color);
 }
 
-/* Для формы: */
+/* Стили для заголовков, чтобы они менялись в зависимости от темы */
+h1, h2, h3, h4, h5, h6 {
+  @apply transition-colors;
+  color: var(--primary-color);
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+  color: var(--dark-primary-color);
+}
+
+/* Размеры и шрифты заголовков */
+h1 {
+  @apply text-3xl font-bold;
+}
+
+h2 {
+  @apply text-2xl font-bold;
+}
+
+h3 {
+  @apply text-xl font-bold;
+}
+
+h4 {
+  @apply text-lg font-bold;
+}
+
+h5 {
+  @apply text-base font-bold;
+}
+
+h6 {
+  @apply text-sm font-bold;
+}
+
+/* Общие стили для инпутов и textarea */
 input,
 textarea {
-  @apply w-full block p-2 text-lg border border-transparent transition-all rounded-md bg-gray-700 text-white;
-  
-  /* Используем переменные для фона и обводки */
+  @apply w-full block p-2 text-lg border border-transparent transition-all rounded-md bg-gray-700 text-white outline-none;
   background-color: var(--background-color);
   color: var(--text-color);
   border-color: var(--primary-color);
 }
+//ПУЛЬЗАЦИЯ
+@keyframes pulseLight {
+  0% {
+    box-shadow: 0 0 6px var(--dark-primary-color);
+  }
+  50% {
+    box-shadow: 0 0 12px var(--dark-primary-color);
+  }
+  100% {
+    box-shadow: 0 0 6px var(--dark-primary-color);
+  }
+}
 
+@keyframes pulseDark {
+  0% {
+    box-shadow: 0 0 6px var(--secondary-color);
+  }
+  50% {
+    box-shadow: 0 0 12px var(--secondary-color);
+  }
+  100% {
+    box-shadow: 0 0 6px var(--secondary-color);
+  }
+}
+
+/* Фокус (клик на поле) для светлой темы */
 input:focus,
 textarea:focus {
-  border-color: var(--primary-color);
-}
-
-/* Для темной темы */
-[data-theme="dark"] input,
-[data-theme="dark"] textarea {
-  background-color: var(--dark-background-color);
-  color: var(--dark-text-color);
   border-color: var(--dark-primary-color);
+  box-shadow: 0 0 8px var(--dark-primary-color);
+  animation: pulseLight 2s infinite alternate ease-in-out;
 }
 
+/* Фокус (клик на поле) для темной темы */
 [data-theme="dark"] input:focus,
 [data-theme="dark"] textarea:focus {
-  border-color: var(--dark-primary-color);
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 8px var(--secondary-color);
+  animation: pulseDark 1s infinite alternate ease-in-out;
 }
+
 
 
 body {
@@ -104,15 +165,14 @@ button:hover {
   @apply bg-opacity-90 shadow-lg;
 }
 
-// Стили для тумблера
+/* Стили для тумблера */
 .ios-toggle {
-  // В светлой теме тумблер будет иметь цвет как secondary-color (розовый)
   @apply w-[50px] h-[30px] rounded-full bg-[var(--toggle-light-color)] relative cursor-pointer transition-colors;
 }
 
 @screen md {
   .ios-toggle {
-    @apply w-[60px] h-[35px]; /* Для большего экрана */
+    @apply w-[60px] h-[35px];
   }
 }
 
@@ -122,15 +182,14 @@ button:hover {
 
 @screen md {
   .toggle-circle {
-    @apply w-[30px] h-[30px]; /* Для большего экрана */
+    @apply w-[30px] h-[30px];
   }
 }
 
-// Когда тема темная, меняем цвет тумблера на тиффани
 [data-theme="dark"] .ios-toggle {
   @apply bg-[var(--toggle-dark-color)];
 }
 
 [data-theme="dark"] .toggle-circle {
-  @apply translate-x-[20px]; /* Перемещаем круглый элемент на правую сторону */
+  @apply translate-x-[20px];
 }
