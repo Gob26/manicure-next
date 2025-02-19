@@ -1,62 +1,62 @@
 // City.module.scss
 .cityContainer {
-  @apply max-w-4xl mx-auto p-4 bg-[#f9f9f9];
-  
-  .item {
-    @apply bg-white rounded-lg overflow-hidden;
-    
-    .header {
-      @apply p-4 border-b border-gray-200;
+  @apply max-w-4xl mx-auto p-4 bg-[var(--background-color)] transition-colors duration-300;
+}
+
+.item {
+  @apply bg-[var(--light-background-color)] rounded-lg overflow-hidden transition-colors duration-300;
+
+  .header {
+    @apply p-4 border-b border-gray-200 dark:border-gray-700;
+
+    h2 {
+      @apply text-xl font-medium text-[var(--text-color)] flex items-center gap-2 transition-colors duration-300;
       
-      h2 {
-        @apply text-xl font-medium text-[#0f0f0f] flex items-center gap-2;
-        
-        &::before {
-          content: "📍";
-          @apply text-base;
-        }
-      }
-      
-      .population {
-        @apply text-sm text-[#606060] mt-1;
+      &::before {
+        content: "📍";
+        @apply text-base;
       }
     }
-    
-    .details {
-      @apply p-4 grid gap-3;
-      
-      .detailItem {
-        @apply flex items-center py-2 px-3 rounded hover:bg-gray-100 transition-colors;
-        
-        .label {
-          @apply text-[#606060] text-sm w-32;
-        }
-        
-        .value {
-          @apply text-[#0f0f0f] font-medium;
-        }
+
+    .population {
+      @apply text-sm text-[#606060] dark:text-gray-400 mt-1 transition-colors duration-300;
+    }
+  }
+
+  .details {
+    @apply p-4 grid gap-3;
+
+    .detailItem {
+      @apply flex items-center py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300;
+
+      .label {
+        @apply text-[#606060] dark:text-gray-400 text-sm w-32 transition-colors duration-300;
       }
-      
-      .actionButtons {
-        @apply flex gap-2 mt-2;
-        
-        button {
-          @apply flex items-center gap-2 py-2 px-4 rounded-full text-sm font-medium;
-          
-          &.primary {
-            @apply bg-[#0f0f0f] text-white hover:bg-[#272727];
-          }
-          
-          &.secondary {
-            @apply bg-gray-100 text-[#0f0f0f] hover:bg-gray-200;
-          }
+
+      .value {
+        @apply text-[var(--text-color)] font-medium transition-colors duration-300;
+      }
+    }
+
+    .actionButtons {
+      @apply flex gap-2 mt-2;
+
+      button {
+        @apply flex items-center gap-2 py-2 px-4 rounded-full text-sm font-medium transition-colors duration-300;
+
+        &.primary {
+          @apply bg-[var(--text-color)] text-[var(--light-background-color)] hover:bg-gray-700 dark:bg-gray-200 dark:text-gray-800 dark:hover:bg-gray-300;
+        }
+
+        &.secondary {
+          @apply bg-gray-100 dark:bg-gray-700 text-[var(--text-color)] hover:bg-gray-200 dark:hover:bg-gray-600;
         }
       }
     }
-    
-    .mapContainer {
-      @apply mt-2;
-      height: 450px;
-    }
+  }
+
+  .mapContainer {
+    @apply mt-2;
+    height: 450px;
   }
 }

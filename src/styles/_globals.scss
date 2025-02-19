@@ -2,62 +2,135 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Основные переменные для тем */
 :root {
-  --primary-color: #ff4081; /* Розовый цвет (светлая тема) */
-  --secondary-color: #0abfbf; /* Бирюзовый цвет */
+  /* Определяем переменные для светлой темы */
+  --primary-color: #f6b1c4; /* Розовый цвет для светлой темы */
+  --secondary-color: #FF9AA2; /* Цвет для второстепенных элементов */
   --background-color: #ffffff;
-  --text-color: #213547;
-  --hover-color: rgba(255, 64, 129, 0.1); /* Легкий розовый ховер */
-  --hover-color-dark: rgba(10, 191, 191, 0.1); /* Легкий бирюзовый ховер */
-  --light-background-color: #ffffff;
+  --text-color: #2C3333;
+  --hover-color: rgba(255, 199, 214, 0.1);
+
+  /* Определяем переменные для темной темы */
+  --dark-primary-color: #0AB697; /* Тиффани цвет для темной темы */
   --dark-background-color: #181818;
-  --light-text-color: #213547;
-  --dark-text-color: rgba(122, 118, 118, 0.87);
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Avenir', Helvetica, Arial, sans-serif;
+  --dark-text-color: #cdfcef;
+  --dark-hover-color: rgba(10, 191, 191, 0.1);
+  
+  /* Цвет для тумблера */
+  --toggle-light-color: var(--secondary-color); /* Цвет тумблера для светлой темы (как secondary-color) */
+  --toggle-dark-color: var(--dark-primary-color); /* Цвет тумблера для темной темы (тиффани) */
 }
 
-/* Темная тема */
 [data-theme="dark"] {
-  --primary-color: var(--secondary-color);
+  /* Для темной темы заменяем цвета */
+  --primary-color: var(--dark-primary-color);
   --background-color: var(--dark-background-color);
   --text-color: var(--dark-text-color);
-  --hover-color: var(--hover-color-dark);
+  --hover-color: var(--dark-hover-color);
+
+  /* Цвет для тумблера при темной теме */
+  --toggle-light-color: var(--dark-primary-color);
 }
 
-/* Глобальные стили */
+/* Для формы: */
+input,
+textarea {
+  @apply w-full block p-2 text-lg border border-transparent transition-all rounded-md bg-gray-700 text-white;
+  
+  /* Используем переменные для фона и обводки */
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-color: var(--primary-color);
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--primary-color);
+}
+
+/* Для темной темы */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea {
+  background-color: var(--dark-background-color);
+  color: var(--dark-text-color);
+  border-color: var(--dark-primary-color);
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus {
+  border-color: var(--dark-primary-color);
+}
+
+
 body {
   @apply bg-[var(--background-color)] text-[var(--text-color)] min-h-screen flex flex-col items-center justify-center transition-all antialiased;
 }
 
-/* Стили для ссылок */
 a {
   @apply font-semibold text-[var(--primary-color)] transition-colors hover:text-opacity-80;
+  @apply text-base;
 }
 
-/* Кнопки (минималистичный стиль) */
+@screen sm {
+  a {
+    @apply text-lg;
+  }
+}
+
+@screen md {
+  a {
+    @apply text-xl;
+  }
+}
+
 button {
   @apply px-6 py-2 rounded-full font-medium bg-[var(--primary-color)] text-white transition-all shadow-md;
+  @apply text-sm;
 }
+
+@screen sm {
+  button {
+    @apply text-base;
+  }
+}
+
+@screen md {
+  button {
+    @apply text-lg;
+  }
+}
+
 button:hover {
   @apply bg-opacity-90 shadow-lg;
 }
 
-/* iOS-стиль переключателя темы */
+// Стили для тумблера
 .ios-toggle {
-  @apply w-[50px] h-[30px] rounded-full bg-[var(--primary-color)] relative cursor-pointer transition-colors; /* Изменяем цвет фона на розовый (var(--primary-color)) */
+  // В светлой теме тумблер будет иметь цвет как secondary-color (розовый)
+  @apply w-[50px] h-[30px] rounded-full bg-[var(--toggle-light-color)] relative cursor-pointer transition-colors;
 }
-.ios-toggle:active {
-  @apply bg-opacity-80;
+
+@screen md {
+  .ios-toggle {
+    @apply w-[60px] h-[35px]; /* Для большего экрана */
+  }
 }
+
 .toggle-circle {
   @apply w-[26px] h-[26px] bg-white rounded-full absolute top-[2px] left-[2px] shadow-md transition-transform;
 }
 
-/* Тёмная тема для тумблера */
-[data-theme="dark"] .ios-toggle {
-  @apply bg-[var(--secondary-color)]; /* В темной теме оставляем бирюзовый цвет (var(--secondary-color)) */
+@screen md {
+  .toggle-circle {
+    @apply w-[30px] h-[30px]; /* Для большего экрана */
+  }
 }
+
+// Когда тема темная, меняем цвет тумблера на тиффани
+[data-theme="dark"] .ios-toggle {
+  @apply bg-[var(--toggle-dark-color)];
+}
+
 [data-theme="dark"] .toggle-circle {
-  @apply translate-x-[20px];
+  @apply translate-x-[20px]; /* Перемещаем круглый элемент на правую сторону */
 }

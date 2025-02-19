@@ -12,7 +12,7 @@ export interface ICity {
   population: number;
   latitude: number;
   longitude: number;
-  citySlug: string;
+  slug: string;
 }
 
 export interface ICityDescription {

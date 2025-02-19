@@ -1,25 +1,51 @@
 .home {
-  @apply bg-[var(--background-color)] min-h-screen py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300; /* Используем CSS переменную для фона и добавляем transition */
+  @apply bg-[var(--background-color)] min-h-screen py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300; 
+  /* Используем CSS переменную для фона и добавляем transition */
 }
 
 .main {
-  @apply flex flex-col items-center text-center mb-8; /* Tailwind utilities для .main */
+  @apply flex flex-col items-center text-center mb-8;
 
   h1 {
-    @apply text-[var(--text-color)] text-4xl sm:text-5xl font-bold transition-colors duration-300; /* Используем CSS переменную для текста и добавляем transition */
+    @apply text-[var(--text-color)] text-4xl sm:text-5xl font-bold transition-colors duration-300;
+    /* Используем CSS переменную для текста и добавляем transition */
   }
 
   p {
-    @apply text-[var(--text-color)] text-lg sm:text-xl mt-4 opacity-75 transition-colors duration-300; /* Используем CSS переменную для текста и добавляем transition */
+    @apply text-[var(--text-color)] text-lg sm:text-xl mt-4 opacity-75 transition-colors duration-300;
+    /* Используем CSS переменную для текста и добавляем transition */
   }
 }
 
 .contentGrid {
-  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4; /* Tailwind utilities для .contentGrid */
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
+  /* Используем Tailwind utilities для .contentGrid */
 }
 
 .card {
-  @apply bg-[var(--light-background-color)] rounded-lg shadow-md p-4 text-center transition-colors duration-300 ease-out hover:translate-y-[-4px]; /* Используем CSS переменную для фона карточки и добавляем transition */
-  /*  Внимание: используем --light-background-color, так как card обычно светлее основного фона */
-  /*  Если нужно тень тоже менять в темной теме, можно сделать и для shadow через CSS переменные или Tailwind variants */
+  @apply bg-[var(--light-background-color)] rounded-lg shadow-md p-4 text-center transition-colors duration-300 ease-out hover:translate-y-[-4px];
+  /* Используем CSS переменную для фона карточки и добавляем transition */
+  /* Внимание: используем --light-background-color, так как card обычно светлее основного фона */
+  /* Если нужно тень тоже менять в темной теме, можно сделать и для shadow через CSS переменные или Tailwind variants */
+}
+
+/* Переопределение стилей для темной темы */
+[data-theme="dark"] {
+  .home {
+    @apply bg-[var(--dark-background-color)]; /* Для темной темы фон темный */
+  }
+
+  .main {
+    h1 {
+      @apply text-[var(--dark-text-color)]; /* Для темной темы цвет текста светлый */
+    }
+
+    p {
+      @apply text-[var(--dark-text-color)]; /* Для темной темы цвет текста светлый */
+    }
+  }
+
+  .card {
+    @apply bg-[var(--dark-background-color)] shadow-lg; /* Для темной темы фон темный, тень усиливается */
+  }
 }

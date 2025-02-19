@@ -12,7 +12,7 @@ export const MENU: IMenuItem[] = [
     {
         icon: Home,
         name: 'Главная',
-        link: '/'
+        link: '/auth'
     },
     { 
         icon: User,
