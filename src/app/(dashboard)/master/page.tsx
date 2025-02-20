@@ -5,7 +5,6 @@ import React from "react";
 const CreateMaster = () => {
   return (
     <div className="max-w-md mx-auto">
-      <h1>Создание профиля мастера</h1>
       <CreateMasterProfilePage /> {/* Используем клиентский компонент */}
     </div>
   );
