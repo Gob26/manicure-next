@@ -4,7 +4,7 @@ export interface IMasterProfileRequest {
   description?: string;
   experience_years: number;
   specialty: string;
-  slug: string;
+  slug?: string;
   name: string;
   address?: string;
   phone?: string;
@@ -16,7 +16,7 @@ export interface IMasterProfileRequest {
   accepts_at_home: boolean;
   accepts_in_salon: boolean;
   accepts_offsite: boolean;
-  image: File | FileList | string;
+  image: File | FileList;
 }
 
 export interface ICreateMasterProfileResponse {
@@ -25,16 +25,16 @@ export interface ICreateMasterProfileResponse {
     id: string;
     title: string;
     name: string;
-    [key: string]: unknown; // Для дополнительных полей от сервера
+    [key: string]: unknown;
   };
 }
 
 export interface IValidationErrorResponse {
-  detail: Array<{
-    loc: [string, number];
+  detail: {
+    loc: string[];
     msg: string;
     type: string;
-  }>;
+  }[];
 }
 
 export class MasterProfileError extends Error {

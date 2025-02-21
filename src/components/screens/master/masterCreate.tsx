@@ -1,3 +1,4 @@
+// components/CreateMasterProfilePage.tsx
 'use client';
 
 import React, { useState } from "react";
@@ -9,14 +10,16 @@ import { MasterProfileError } from "@/types/masters/masterCrUD.interface";
 
 const CreateMasterProfilePage = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
     watch,
   } = useForm<IMasterProfileRequest>({
+    mode: 'onBlur',
     defaultValues: {
       accepts_at_home: false,
       accepts_in_salon: false,
@@ -24,9 +27,8 @@ const CreateMasterProfilePage = () => {
     }
   });
 
-  // Наблюдаем за изменениями поля image для предпросмотра
   const watchedImage = watch("image");
-  
+
   React.useEffect(() => {
     if (watchedImage instanceof FileList && watchedImage.length > 0) {
       const file = watchedImage[0];
@@ -42,34 +44,41 @@ const CreateMasterProfilePage = () => {
     const loadingToast = toast.loading('Создание профиля...');
     
     try {
-      const formData = { ...data };
-      // Правильная обработка поля image
-      if (formData.image instanceof FileList && formData.image.length > 0) {
-        formData.image = formData.image[0];
-      }
-
-      const response = await createMasterProfileService(formData);
+      setIsSubmitting(true);
+      
+      // Очистка пустых строк
+      const cleanData = Object.fromEntries(
+        Object.entries(data).map(([key, value]) => [
+          key, 
+          typeof value === 'string' ? value.trim() : value
+        ])
+      ) as IMasterProfileRequest;
+  
+      console.log('Очищенные данные формы:', cleanData);
+  
+      await createMasterProfileService(cleanData);
       
       toast.dismiss(loadingToast);
       toast.success('Профиль успешно создан!');
       reset();
       setImagePreview(null);
-      
     } catch (error) {
       toast.dismiss(loadingToast);
       
       if (error instanceof MasterProfileError) {
-        if (error.validationErrors) {
-          const firstError = error.validationErrors.detail[0];
-          toast.error(`Ошибка валидации: ${firstError.msg}`);
+        if (error.validationErrors?.detail) {
+          error.validationErrors.detail.forEach(err => {
+            toast.error(`Ошибка: ${err.msg}`);
+          });
         } else {
           toast.error(error.message);
         }
       } else {
         toast.error('Произошла неизвестная ошибка');
+        console.error('Неожиданная ошибка:', error);
       }
-      
-      console.error("Ошибка при создании профиля:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -83,6 +92,24 @@ const CreateMasterProfilePage = () => {
       <h2 className="text-2xl font-bold mb-6">Создать профиль мастера</h2>
       
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div>
+          <label htmlFor="name" className={labelClassName}>Имя</label>
+          <input
+            {...register("name", {
+              required: "Имя обязательно",
+              maxLength: {
+                value: 255,
+                message: "Имя не может быть длиннее 255 символов"
+              }
+            })}
+            id="name"
+            type="text"
+            placeholder="Введите ваше имя"
+            className={inputClassName}
+          />
+          {errors.name && <p className={errorClassName}>{errors.name.message}</p>}
+        </div>
+
         <div>
           <label htmlFor="title" className={labelClassName}>Заголовок</label>
           <input
@@ -99,6 +126,21 @@ const CreateMasterProfilePage = () => {
             className={inputClassName}
           />
           {errors.title && <p className={errorClassName}>{errors.title.message}</p>}
+        </div>
+
+        <div>
+          <label htmlFor="experience_years" className={labelClassName}>Опыт работы (лет)</label>
+          <input
+            {...register("experience_years", {
+              required: "Укажите опыт работы",
+              min: { value: 0, message: "Опыт не может быть отрицательным" },
+              valueAsNumber: true
+            })}
+            id="experience_years"
+            type="number"
+            className={inputClassName}
+          />
+          {errors.experience_years && <p className={errorClassName}>{errors.experience_years.message}</p>}
         </div>
 
         <div>
@@ -135,7 +177,6 @@ const CreateMasterProfilePage = () => {
             <label htmlFor="phone" className={labelClassName}>Телефон</label>
             <input
               {...register("phone", {
-                maxLength: 20,
                 pattern: {
                   value: /^[+]?[0-9]{10,15}$/,
                   message: "Введите корректный номер телефона"
@@ -164,6 +205,42 @@ const CreateMasterProfilePage = () => {
               className={inputClassName}
             />
             {errors.telegram && <p className={errorClassName}>{errors.telegram.message}</p>}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="whatsapp" className={labelClassName}>WhatsApp</label>
+            <input
+              {...register("whatsapp", {
+                pattern: {
+                  value: /^https?:\/\/.+/i,
+                  message: "Введите корректную ссылку"
+                }
+              })}
+              id="whatsapp"
+              type="url"
+              placeholder="https://wa.me/..."
+              className={inputClassName}
+            />
+            {errors.whatsapp && <p className={errorClassName}>{errors.whatsapp.message}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="instagram" className={labelClassName}>Instagram</label>
+            <input
+              {...register("instagram", {
+                pattern: {
+                  value: /^https?:\/\/.+/i,
+                  message: "Введите корректную ссылку"
+                }
+              })}
+              id="instagram"
+              type="url"
+              placeholder="https://instagram.com/..."
+              className={inputClassName}
+            />
+            {errors.instagram && <p className={errorClassName}>{errors.instagram.message}</p>}
           </div>
         </div>
 
@@ -222,7 +299,7 @@ const CreateMasterProfilePage = () => {
               validate: {
                 fileSize: (value: FileList | string | File) => {
                   if (value instanceof FileList && value.length > 0) {
-                    const size = value[0].size / 1024 / 1024; // размер в МБ
+                    const size = value[0].size / 1024 /  1024; // размер в МБ
                     return size <= 5 || "Размер файла не должен превышать 5МБ";
                   }
                   return true;
