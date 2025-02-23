@@ -2,7 +2,7 @@
 export interface ISalonProfileRequest {
     title: string;
     description?: string;
-    specialty: string;
+    text?: string;
     slug?: string;
     name: string;
     address: string;
