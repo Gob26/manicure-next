@@ -1,11 +1,13 @@
 // src/pages/register.tsx (Страница регистрации)
-import LoginPage from "@/components/screens/auth/authLogin";
+"use client";
+
 import React from "react";
+import LoginPage from '@/components/screens/auth/authLogin';
 
 const Login = () => {
   return (
     <div className="max-w-md mx-auto">
-      <LoginPage /> {/* Используем клиентский компонент */}
+      <LoginPage />
     </div>
   );
 };

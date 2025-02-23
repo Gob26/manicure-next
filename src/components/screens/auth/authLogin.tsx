@@ -1,39 +1,50 @@
 'use client';
-
-import React, { useState } from "react";
+import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Toaster, toast } from "react-hot-toast";
-import { useLogin } from "@/hooks/auth/useLogin";  // Хук для логина
-import { ILoginRequest } from "@/types/auth/authLogin.interface"; // Тип для запроса
+import { toast, Toaster } from "react-hot-toast";
+import { useLogin } from "@/hooks/auth/useLogin";
+import { ILoginRequest } from "@/types/auth/authLogin.interface";
+import { useRouter } from "next/navigation";
+import { useAtom } from 'jotai';
+import { isAuthenticatedAtom } from "@/store/authAtoms";
 
 const LoginPage = () => {
-  const { login, error } = useLogin();  // Используем хук для авторизации
-  const { register, handleSubmit, formState: { errors } } = useForm<ILoginRequest>();
-  const [loading, setLoading] = useState(false);
+  const [isAuthenticated] = useAtom(isAuthenticatedAtom);
+  const [loading, setLoading] = React.useState<boolean>(false); //  <--  Добавлено состояние loading
+  const [error, setError] = React.useState<string | null>(null); //  <--  Добавлено состояние error
+  const router = useRouter();
+  const { handleLogin } = useLogin();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm<ILoginRequest>();
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated, router]);
 
   const onSubmit: SubmitHandler<ILoginRequest> = async (data) => {
-    setLoading(true);  // Включаем загрузку
+    setLoading(true);
+    setError(null); // Сбрасываем предыдущую ошибку
     try {
-      const response = await login(data);  // Вызов сервиса логина с переданными данными
-
-      if (response) {
-        toast.success("Вы успешно авторизованы!");  // Показать успех
-      } else {
-        toast.error("Неверные учетные данные!");  // Показать ошибку
-      }
-    } catch (err) {
-      // Логируем ошибку в случае исключения
+      await handleLogin(data);
+      toast.success("Вы успешно авторизованы!");
+    } catch (error: any) { //  <--  Указан тип error как any или Error
+      console.error('Login error:', error);
+      setError(error.message || "Произошла ошибка при авторизации."); //  <--  Устанавливаем состояние error
       toast.error("Произошла ошибка при авторизации.");
     } finally {
-      setLoading(false);  // Выключаем загрузку
+      setLoading(false);
     }
   };
 
   return (
     <div className="login-form-container">
       <h2>Вход в систему</h2>
-      
-      {/* Форма авторизации */}
+
       <form onSubmit={handleSubmit(onSubmit)} className="login-form">
         <div className="form-group">
           <label htmlFor="username">Логин</label>
@@ -60,10 +71,9 @@ const LoginPage = () => {
         </button>
       </form>
 
-      {/* Показываем ошибку, если она есть */}
       {error && toast.error(error)}
 
-      <Toaster /> {/* Для отображения сообщений о состоянии */}
+      <Toaster />
     </div>
   );
 };

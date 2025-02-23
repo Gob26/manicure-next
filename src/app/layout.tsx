@@ -1,10 +1,13 @@
-import "@/styles/_globals.scss"; // Глобальные стили здесь!
+// src/app/layout.tsx
+import "@/styles/_globals.scss";
 import Sidebar from '@/components/sideBar/components/SidebarDynamic';
 import { ThemeProvider } from "@/shared/context/ThemeContext";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
-import LayoutComponent from "@/components/layout/Layout"; // Переименовали импорт, чтобы не путать с самим layout.tsx
+import LayoutComponent from "@/components/layout/Layout";
 import { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AuthInitializer } from "@/components/screens/auth/AuthInitializer";
+// import { AuthProvider } from '@/providers/AuthProvider'; // Убираем AuthProvider
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -17,8 +20,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Маникюр - Салоны красоты и мастера маникюра", // Общий title для сайта
-    description: "Найдите лучшие салоны маникюра и квалифицированных мастеров в вашем городе. Широкий выбор услуг и удобный поиск.", // Общий description
+    title: "Маникюр - Салоны красоты и мастера маникюра",
+    description: "Найдите лучшие салоны маникюра и квалифицированных мастеров в вашем городе. Широкий выбор услуг и удобный поиск.",
 };
 
 export default function RootLayout({
@@ -31,10 +34,13 @@ export default function RootLayout({
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <ThemeProvider>
                     <ReactQueryProvider>
-                        <LayoutComponent title={metadata.title} description={metadata.description}> {/* Используем LayoutComponent и передаем общие title и description */}
-                            <Sidebar />
-                            {children}
-                        </LayoutComponent>
+                        {/* <AuthProvider> {/* Убираем AuthProvider */}
+                            <LayoutComponent title={metadata.title} description={metadata.description}>
+                                <Sidebar />
+                                {children}
+                            </LayoutComponent>
+                        {/* </AuthProvider> {/* Убираем AuthProvider */}
+                        <AuthInitializer /> {/* Добавляем AuthInitializer для инициализации Jotai */}
                     </ReactQueryProvider>
                 </ThemeProvider>
             </body>
