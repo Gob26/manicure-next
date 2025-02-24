@@ -1,15 +1,15 @@
-// src/pages/register.tsx (Страница регистрации)
+// src/pages/register.tsx
 "use client";
-
 import React from "react";
-import LoginPage from '@/components/screens/auth/authLogin';
+import LoginForm from '@/components/screens/auth/authLogin';
+import { AuthMiddleware } from "@/hooks/auth/AuthMiddleware";
 
-const Login = () => {
+export default function LoginPage() {
   return (
     <div className="max-w-md mx-auto">
-      <LoginPage />
+      <AuthMiddleware requireAuth={false}>
+        <LoginForm />
+      </AuthMiddleware>
     </div>
   );
-};
-
-export default Login;
+}

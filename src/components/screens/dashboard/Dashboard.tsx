@@ -1,25 +1,12 @@
 // src/components/screens/dashboard/Dashboard.tsx
 "use client";
-
 import { useUserRole } from "@/hooks/auth/useUserRole";
 import CreateMasterProfilePage from "@/components/screens/master/masterCreate";
 import CreateSalonProfilePage from "@/components/screens/salon/salonCreate";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { AuthMiddleware } from "@/hooks/auth/AuthMiddleware";
 
-
-const DashboardPage = () => {
+const DashboardContent = () => {
   const role = useUserRole();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (role === undefined) return; // Ждём, пока состояние обновится
-    if (!role) {
-      router.replace("/login"); // Используем `replace`, чтобы убрать возможность вернуться назад
-    }
-  }, [role, router]);
-  
-  
 
   if (!role) return <p>Загрузка...</p>;
 
@@ -29,6 +16,14 @@ const DashboardPage = () => {
       {role === "master" && <CreateMasterProfilePage />}
       {role === "salon" && <CreateSalonProfilePage />}
     </div>
+  );
+};
+
+const DashboardPage = () => {
+  return (
+    <AuthMiddleware requireAuth={true}>
+      <DashboardContent />
+    </AuthMiddleware>
   );
 };
 

@@ -17,7 +17,7 @@ export const MENU: IMenuItem[] = [
     { 
         icon: User,
         name: 'Кабинет',
-        link: '/cabinet'
+        link: '/dashboard'
     },
     {
         icon: MapPin,

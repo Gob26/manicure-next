@@ -1,14 +1,11 @@
-// src/hooks/auth/useLogin.ts
-// import { useAuth } from '@/providers/AuthProvider'; // Убираем useAuth
 import { loginService } from '@/services/auth/authLoginService';
 import { ILoginRequest } from '@/types/auth/authLogin.interface';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { useSetAtom } from 'jotai'; // Импортируем useSetAtom
+import { useSetAtom } from 'jotai';
 import { loginAtom } from '@/store/authAtoms';
 
 export const useLogin = () => {
-  // const { login } = useAuth(); // Убираем useAuth
   const login = useSetAtom(loginAtom); // Используем useSetAtom для функции login
   const router = useRouter();
 
@@ -16,13 +13,15 @@ export const useLogin = () => {
     try {
       const response = await loginService(data);
       if (response?.access_token) {
-        login(response.access_token); // Вызываем функцию login из атома
-        toast.success('Вы успешно авторизованы!');
-        router.push('/dashboard');
+        await login(response.access_token);  // Обновляем состояние аутентификации
+        // Убираем редирект после авторизации
+        // Добавляем небольшую задержку перед редиректом
+        // await new Promise(resolve => setTimeout(resolve, 200)); // Увеличил задержку
+        // router.replace('/dashboard');  // Редирект после успешной аутентификации
       }
     } catch (error) {
       toast.error('Ошибка авторизации');
-      throw error;
+      throw error;  // Прокидываем ошибку дальше
     }
   };
 

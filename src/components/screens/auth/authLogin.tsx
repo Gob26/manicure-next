@@ -5,15 +5,13 @@ import { toast, Toaster } from "react-hot-toast";
 import { useLogin } from "@/hooks/auth/useLogin";
 import { ILoginRequest } from "@/types/auth/authLogin.interface";
 import { useRouter } from "next/navigation";
-import { useAtom } from 'jotai';
-import { isAuthenticatedAtom } from "@/store/authAtoms";
 
 const LoginPage = () => {
-  const [isAuthenticated] = useAtom(isAuthenticatedAtom);
-  const [loading, setLoading] = React.useState<boolean>(false); //  <--  Добавлено состояние loading
-  const [error, setError] = React.useState<string | null>(null); //  <--  Добавлено состояние error
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | null>(null);
   const router = useRouter();
   const { handleLogin } = useLogin();
+
   const {
     register,
     handleSubmit,
@@ -21,23 +19,30 @@ const LoginPage = () => {
   } = useForm<ILoginRequest>();
 
   React.useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/dashboard');
+    if (error) {
+      const toastId = toast.error(error);  // Оповещаем об ошибке
+      return () => toast.dismiss(toastId);  // Убираем старые тосты
     }
-  }, [isAuthenticated, router]);
+  }, [error]);
 
   const onSubmit: SubmitHandler<ILoginRequest> = async (data) => {
     setLoading(true);
-    setError(null); // Сбрасываем предыдущую ошибку
+    setError(null);  // Сбрасываем ошибки при новом запросе
     try {
-      await handleLogin(data);
-      toast.success("Вы успешно авторизованы!");
-    } catch (error: any) { //  <--  Указан тип error как any или Error
+      await handleLogin(data);  // Обработка логина
+      toast.success("Вы успешно авторизованы!");  // Успешный логин
+    } catch (error: unknown) {
       console.error('Login error:', error);
-      setError(error.message || "Произошла ошибка при авторизации."); //  <--  Устанавливаем состояние error
-      toast.error("Произошла ошибка при авторизации.");
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : typeof error === "string"
+          ? error
+          : "Произошла ошибка при авторизации.";  // Формируем сообщение об ошибке
+
+      setError(errorMessage);  // Устанавливаем ошибку в состояние
     } finally {
-      setLoading(false);
+      setLoading(false);  // Завершаем процесс загрузки
     }
   };
 
@@ -66,12 +71,10 @@ const LoginPage = () => {
           {errors.password && <p>{errors.password.message}</p>}
         </div>
 
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading || isSubmitting}>
           {loading ? "Загрузка..." : "Войти"}
         </button>
       </form>
-
-      {error && toast.error(error)}
 
       <Toaster />
     </div>
