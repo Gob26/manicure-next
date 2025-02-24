@@ -1,66 +1,51 @@
-//src/components/chat/WebRTCConnection.ts
-// Создавать RTCPeerConnection.
-//✅ Обрабатывать ICE-кандидатов.
-//✅ Отправлять SDP-офер и SDP-ответ.
-//✅ Связывать WebRTC с WebSocket.
-
-import { peerConnectionAtom, webSocketAtom } from "@/store/chatAtoms";
+import { peerConnectionAtom } from "@/store/chatAtoms";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
+import { useWebSocketClient } from "./WebSocketClient";
 
 const ICE_SERVERS = {
-  iceServers: [{ urls: "stun:stun.l.google.com:19302" }], // STUN-сервер Google (есть TUN и STUN)
+  iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
 };
 
 export const useWebRTCConnection = (userId: string | null, targetUserId: string | null) => {
   const [peerConnection, setPeerConnection] = useAtom(peerConnectionAtom);
-  const [webSocket] = useAtom(webSocketAtom);
   const [isConnected, setIsConnected] = useState(false);
 
+  // Подключаем WebSocket-клиент и передаем в него обработчик WebRTC сообщений
+  const { sendMessage, activeUsers, messages } = useWebSocketClient(userId, handleWebRTCMessage);
+
   useEffect(() => {
-    if (!userId || !targetUserId || !webSocket) return;
+    if (!userId || !targetUserId) return;
 
     const pc = new RTCPeerConnection(ICE_SERVERS);
     setPeerConnection(pc);
 
     pc.onicecandidate = (event) => {
       if (event.candidate && targetUserId) {
-        webSocket.send(
-          JSON.stringify({
-            type: "candidate",
-            to: targetUserId, // Исправлено! Теперь кандидат отправляется собеседнику.
-            candidate: event.candidate,
-          })
-        );
+        sendMessage(targetUserId, JSON.stringify({ type: "candidate", candidate: event.candidate }));
       }
     };
 
-    pc.ontrack = (event) => {
-      console.log("Получен медиапоток", event.streams);
+    pc.onconnectionstatechange = () => {
+      setIsConnected(pc.connectionState === "connected");
     };
 
     return () => {
       pc.close();
       setPeerConnection(null);
     };
-  }, [userId, targetUserId, webSocket, setPeerConnection]);
+  }, [userId, targetUserId, sendMessage, setPeerConnection]);
 
   const startCall = async () => {
-    if (!peerConnection || !webSocket || !targetUserId) return;
+    if (!peerConnection || !targetUserId) return;
 
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
 
-    webSocket.send(
-      JSON.stringify({
-        type: "offer",
-        to: targetUserId,
-        offer,
-      })
-    );
+    sendMessage(targetUserId, JSON.stringify({ type: "offer", offer }));
   };
 
-  const handleWebRTCMessage = async (data: any) => {
+  async function handleWebRTCMessage(data: any) {
     if (!peerConnection) return;
 
     if (data.type === "offer") {
@@ -68,19 +53,15 @@ export const useWebRTCConnection = (userId: string | null, targetUserId: string 
       const answer = await peerConnection.createAnswer();
       await peerConnection.setLocalDescription(answer);
 
-      webSocket?.send(
-        JSON.stringify({
-          type: "answer",
-          to: data.from,
-          answer,
-        })
-      );
-    } else if (data.type === "answer") {
+      sendMessage(data.from, JSON.stringify({ type: "answer", answer }));
+    } 
+    else if (data.type === "answer") {
       await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
-    } else if (data.type === "candidate") {
+    } 
+    else if (data.type === "candidate") {
       await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
     }
-  };
+  }
 
-  return { startCall, isConnected, handleWebRTCMessage };
+  return { startCall, isConnected, activeUsers, messages };
 };

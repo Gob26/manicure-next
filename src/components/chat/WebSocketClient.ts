@@ -16,7 +16,7 @@ export const SERVER_URL = "ws://localhost:8000/api/v1/ws/signaling"
  * @param userId - Идентификатор текущего пользователя, необходимый для установления соединения.
  * @returns Объект с функцией отправки сообщений (sendMessage), списком активных пользователей и историей сообщений.
  */
-export const useWebSocketClient = (userId: string | null) => {
+export const useWebSocketClient = (userId: string | null, handleWebRTCMessage: (data: any) => Promise<void>) => {
     // Получаем атомы состояния из Jotai:
     // webSocketAtom - для хранения объекта WebSocket,
     // activeUsersAtom - для списка активных пользователей,
